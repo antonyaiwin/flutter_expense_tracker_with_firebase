@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/controller/add_record_screen_controller.dart';
+import 'package:flutter_expense_tracker/controller/database_controller.dart';
 import 'package:flutter_expense_tracker/core/constants/color_constants.dart';
 import 'package:provider/provider.dart';
 
@@ -139,6 +140,12 @@ class AddRecordScreen extends StatelessWidget {
                                 hintText: 'Enter Notes',
                                 isDense: true,
                               ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a note';
+                                }
+                                return null;
+                              },
                             ),
                             const SizedBox(height: 30),
                             InkWell(
@@ -147,7 +154,17 @@ class AddRecordScreen extends StatelessWidget {
                                     .read<AddRecordScreenController>()
                                     .formKey
                                     .currentState!
-                                    .validate()) {}
+                                    .validate()) {
+                                  context
+                                      .read<AddRecordScreenController>()
+                                      .addData(context);
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Data added successfully'),
+                                    ),
+                                  );
+                                }
                               },
                               borderRadius: BorderRadius.circular(10),
                               child: Ink(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/controller/add_record_screen_controller.dart';
-import 'package:flutter_expense_tracker/model/record_model.dart';
+import 'package:flutter_expense_tracker/controller/database_controller.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/color_constants.dart';
 import '../add_record_screen/add_record_screen.dart';
@@ -20,7 +20,11 @@ class HomeScreen extends StatelessWidget {
             backgroundColor: ColorConstants.black26,
             title: Row(
               children: [
-                const CircleAvatar(radius: 24),
+                const CircleAvatar(
+                  radius: 24,
+                  backgroundImage: NetworkImage(
+                      'https://images.pexels.com/photos/2380794/pexels-photo-2380794.jpeg?auto=compress&cs=tinysrgb&w=600'),
+                ),
                 const SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,19 +78,26 @@ class HomeScreen extends StatelessWidget {
               bottom: 100,
               top: 5,
             ),
-            sliver: SliverList.separated(
-              itemBuilder: (context, index) {
-                return TransactionCard(
-                  item: RecordModel(
-                      title: 'title',
-                      category: 'category',
-                      amount: 12345,
-                      date: DateTime(2024, 4, 7),
-                      isIncome: true),
+            sliver: Consumer<DatabaseController>(
+              builder: (context, value, child) {
+                if (value.transactionsList.isEmpty) {
+                  return const SliverFillRemaining(
+                    child: Center(
+                      child: Text('No records found!'),
+                    ),
+                  );
+                } else {}
+                return SliverList.separated(
+                  itemBuilder: (context, index) {
+                    return TransactionCard(
+                      item: value.transactionsList[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10),
+                  itemCount: value.transactionsList.length,
                 );
               },
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemCount: 50,
             ),
           ),
         ],

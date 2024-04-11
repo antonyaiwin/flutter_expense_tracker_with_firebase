@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/controller/database_controller.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/color_constants.dart';
 import 'transaction_icon.dart';
@@ -7,10 +9,8 @@ class TotalCard extends StatelessWidget {
   const TotalCard({
     super.key,
     this.isIncome = true,
-    required this.amount,
   });
   final bool isIncome;
-  final String amount;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,12 +37,16 @@ class TotalCard extends StatelessWidget {
                           : ColorConstants.primaryRed,
                     ),
               ),
-              Text(
-                '\$$amount',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.w600),
+              Consumer<DatabaseController>(
+                builder: (context, value, child) {
+                  return Text(
+                    '\$${isIncome ? value.totalIncome.toStringAsFixed(0) : value.totalExpense.toStringAsFixed(0)}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.w600),
+                  );
+                },
               ),
             ],
           ),

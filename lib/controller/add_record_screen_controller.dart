@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/model/record_model.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import 'database_controller.dart';
 
 class AddRecordScreenController with ChangeNotifier {
   final TextEditingController amountController = TextEditingController();
@@ -41,6 +45,23 @@ class AddRecordScreenController with ChangeNotifier {
     selectedDate = value;
     dateController.text =
         DateFormat('MMM dd, yyyy hh:mm a').format(selectedDate!);
+  }
+
+  // function to add data
+  void addData(BuildContext context) {
+    context.read<DatabaseController>().addData(
+          getRecordModel(),
+        );
+  }
+
+  RecordModel getRecordModel() {
+    return RecordModel(
+      note: notesController.text,
+      category: selectedCategory!,
+      amount: double.parse(amountController.text),
+      date: selectedDate!,
+      isIncome: selectedIndex == 0,
+    );
   }
 
   // getter function to get corresponding category list according to selected type

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/controller/database_controller.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/color_constants.dart';
 import 'total_card.dart';
@@ -31,26 +33,28 @@ class SummaryCard extends StatelessWidget {
                     color: ColorConstants.primaryWhite,
                   ),
             ),
-            Text(
-              '\$14,564',
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    color: ColorConstants.primaryWhite,
-                    fontWeight: FontWeight.bold,
-                  ),
+            Consumer<DatabaseController>(
+              builder: (BuildContext context, DatabaseController value,
+                  Widget? child) {
+                return Text(
+                  '\$${value.totalBalance.toStringAsFixed(0)}',
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        color: ColorConstants.primaryWhite,
+                        fontWeight: FontWeight.bold,
+                      ),
+                );
+              },
             ),
             const SizedBox(height: 20),
             const Row(
               children: [
                 Expanded(
-                  child: TotalCard(
-                    amount: '2653',
-                  ),
+                  child: TotalCard(),
                 ),
                 SizedBox(width: 10),
                 Expanded(
                   child: TotalCard(
                     isIncome: false,
-                    amount: '2656',
                   ),
                 ),
               ],
