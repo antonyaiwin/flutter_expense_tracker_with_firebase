@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => DatabaseController(),
-        )
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -48,8 +48,8 @@ class AddRecordScreenController with ChangeNotifier {
   }
 
   // function to add data
-  void addData(BuildContext context) {
-    context.read<DatabaseController>().addData(
+  Future<void> addData(BuildContext context) async {
+    await context.read<DatabaseController>().addData(
           getRecordModel(),
         );
   }

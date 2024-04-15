@@ -102,24 +102,48 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: ColorConstants.black26,
-        shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  ChangeNotifierProvider<AddRecordScreenController>(
-                create: (context) => AddRecordScreenController(),
-                child: const AddRecordScreen(),
-              ),
-            ),
-          );
-        },
-        child: const Icon(
-          Icons.add,
-          color: ColorConstants.primaryWhite,
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+        child: BottomNavigationBar(
+          backgroundColor: ColorConstants.black26,
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: ColorConstants.primaryWhite,
+          unselectedItemColor: ColorConstants.primaryWhite.withOpacity(0.3),
+          onTap: (value) {
+            if (value == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ChangeNotifierProvider<AddRecordScreenController>(
+                    create: (context) => AddRecordScreenController(),
+                    child: const AddRecordScreen(),
+                  ),
+                ),
+              );
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.bar_chart_outlined), label: ''),
+            BottomNavigationBarItem(
+                icon: CircleAvatar(
+                  backgroundColor: ColorConstants.primaryWhite,
+                  radius: 16,
+                  child: Icon(
+                    Icons.add,
+                    color: ColorConstants.black26,
+                  ),
+                ),
+                label: ''),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.notifications_outlined), label: ''),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline), label: ''),
+          ],
         ),
       ),
     );

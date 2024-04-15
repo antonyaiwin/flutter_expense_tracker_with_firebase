@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/controller/add_record_screen_controller.dart';
-import 'package:flutter_expense_tracker/controller/database_controller.dart';
 import 'package:flutter_expense_tracker/core/constants/color_constants.dart';
 import 'package:provider/provider.dart';
 
@@ -149,21 +148,41 @@ class AddRecordScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 30),
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 if (context
                                     .read<AddRecordScreenController>()
                                     .formKey
                                     .currentState!
                                     .validate()) {
-                                  context
-                                      .read<AddRecordScreenController>()
-                                      .addData(context);
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Data added successfully'),
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) => const AlertDialog(
+                                      contentPadding: EdgeInsets.all(20),
+                                      content: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(),
+                                          SizedBox(width: 10),
+                                          Text('Adding Record'),
+                                        ],
+                                      ),
                                     ),
                                   );
+                                  await context
+                                      .read<AddRecordScreenController>()
+                                      .addData(context)
+                                      .then((value) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content:
+                                            Text('Data added successfully'),
+                                      ),
+                                    );
+                                  });
                                 }
                               },
                               borderRadius: BorderRadius.circular(10),
