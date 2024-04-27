@@ -1,11 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/controller/database_controller.dart';
 import 'package:flutter_expense_tracker/view/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/color_constants.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MainApp());
 }
 

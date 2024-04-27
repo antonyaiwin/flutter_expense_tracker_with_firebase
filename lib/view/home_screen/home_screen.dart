@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/controller/add_record_screen_controller.dart';
 import 'package:flutter_expense_tracker/controller/database_controller.dart';
+import 'package:flutter_expense_tracker/model/record_model.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/color_constants.dart';
 import '../add_record_screen/add_record_screen.dart';
@@ -78,27 +81,40 @@ class HomeScreen extends StatelessWidget {
               bottom: 100,
               top: 5,
             ),
-            sliver: Consumer<DatabaseController>(
-              builder: (context, value, child) {
-                if (value.transactionsList.isEmpty) {
-                  return const SliverFillRemaining(
-                    child: Center(
-                      child: Text('No records found!'),
-                    ),
-                  );
-                } else {}
-                return SliverList.separated(
-                  itemBuilder: (context, index) {
-                    return TransactionCard(
-                      item: value.transactionsList[index],
+            sliver: StreamBuilder(
+                stream: context
+                    .read<DatabaseController>()
+                    .collection
+                    .orderBy(
+                      'date',
+                      descending: true,
+                    )
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  log('new snapshot');
+                  if (!snapshot.hasData) {
+                    return const SliverFillRemaining(
+                      child: Center(
+                        child: Text('No records found!'),
+                      ),
                     );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
-                  itemCount: value.transactionsList.length,
-                );
-              },
-            ),
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SliverFillRemaining(
+                        child: Center(child: CircularProgressIndicator()));
+                  }
+                  return SliverList.separated(
+                    itemBuilder: (context, index) {
+                      return TransactionCard(
+                        item: RecordModel.fromMap(snapshot.data!.docs[index]
+                            .data() as Map<String, dynamic>),
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemCount: snapshot.data?.docs.length ?? 0,
+                  );
+                }),
           ),
         ],
       ),

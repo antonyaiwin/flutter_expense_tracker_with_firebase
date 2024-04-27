@@ -1,5 +1,5 @@
 class RecordModel {
-  int? id;
+  // int? id;
   String note;
   String category;
   double amount;
@@ -7,7 +7,7 @@ class RecordModel {
   bool isIncome;
 
   RecordModel({
-    this.id,
+    // this.id,
     required this.note,
     required this.category,
     required this.amount,
@@ -24,7 +24,7 @@ class RecordModel {
     bool? isIncome,
   }) {
     return RecordModel(
-      id: id ?? this.id,
+      // id: id ?? this.id,
       note: note ?? this.note,
       category: category ?? this.category,
       amount: amount ?? this.amount,
@@ -35,7 +35,7 @@ class RecordModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      // 'id': id,
       'note': note,
       'category': category,
       'amount': amount,
@@ -46,12 +46,12 @@ class RecordModel {
 
   factory RecordModel.fromMap(Map<String, dynamic> map) {
     return RecordModel(
-      id: map['id'] != null ? map['id'] as int : null,
+      // id: map['id'] != null ? map['id'] as int : null,
       note: map['note'] as String,
       category: map['category'] as String,
       amount: map['amount'] as double,
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
-      isIncome: map['isIncome'] == 1,
+      isIncome: map['isIncome'],
     );
   }
 }
