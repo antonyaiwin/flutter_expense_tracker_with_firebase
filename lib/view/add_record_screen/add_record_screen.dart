@@ -16,9 +16,11 @@ class AddRecordScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: const Text(
-          'Add Record',
-          style: TextStyle(fontWeight: FontWeight.w500),
+        title: Text(
+          context.read<AddRecordScreenController>().transactionId == null
+              ? 'Add Record'
+              : 'Edit Record',
+          style: const TextStyle(fontWeight: FontWeight.w500),
         ),
       ),
       body: Padding(
@@ -193,10 +195,16 @@ class AddRecordScreen extends StatelessWidget {
                                   color: ColorConstants.black26,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
-                                    'Add Record',
-                                    style: TextStyle(
+                                    context
+                                                .read<
+                                                    AddRecordScreenController>()
+                                                .transactionId ==
+                                            null
+                                        ? 'Add Record'
+                                        : 'Save Record',
+                                    style: const TextStyle(
                                       color: ColorConstants.primaryWhite,
                                       fontWeight: FontWeight.w600,
                                     ),

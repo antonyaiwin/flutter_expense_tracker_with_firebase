@@ -56,7 +56,7 @@ class DatabaseController extends ChangeNotifier {
   }
 
   // edit data from in collection
-  Future<void> editData(String id, RecordModel item) async {
+  Future<void> editData({required String id, required RecordModel item}) async {
     await collection.doc(id).set(item.toMap());
   }
 }

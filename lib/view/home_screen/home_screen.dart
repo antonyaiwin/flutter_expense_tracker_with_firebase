@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/color_constants.dart';
 import '../add_record_screen/add_record_screen.dart';
 import 'widgets/summary_card.dart';
+import 'widgets/transaction_alert_dialog.dart';
 import 'widgets/transaction_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -105,9 +106,21 @@ class HomeScreen extends StatelessWidget {
                   }
                   return SliverList.separated(
                     itemBuilder: (context, index) {
+                      RecordModel item = RecordModel.fromMap(
+                          snapshot.data!.docs[index].data()
+                              as Map<String, dynamic>);
                       return TransactionCard(
-                        item: RecordModel.fromMap(snapshot.data!.docs[index]
-                            .data() as Map<String, dynamic>),
+                        item: item,
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => TransactionAlertDialog(
+                              item: item,
+                              transactionId:
+                                  snapshot.data?.docs[index].id ?? '',
+                            ),
+                          );
+                        },
                       );
                     },
                     separatorBuilder: (context, index) =>

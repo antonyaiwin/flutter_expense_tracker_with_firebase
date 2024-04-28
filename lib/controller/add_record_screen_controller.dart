@@ -13,6 +13,17 @@ class AddRecordScreenController with ChangeNotifier {
   int selectedIndex = 0;
   String? selectedCategory;
   DateTime? selectedDate;
+  String? transactionId;
+  AddRecordScreenController({this.transactionId, RecordModel? item}) {
+    if (transactionId != null && item != null) {
+      amountController.text = item.amount.toString();
+      dateSelected(item.date);
+      notesController.text = item.note;
+      selectedCategory = item.category;
+      selectedIndex = item.isIncome ? 0 : 1;
+    }
+  }
+
   List<String> incomeCategoryItems = [
     'Salary',
     'Sale',
@@ -49,9 +60,16 @@ class AddRecordScreenController with ChangeNotifier {
 
   // function to add data
   Future<void> addData(BuildContext context) async {
-    await context.read<DatabaseController>().addData(
-          getRecordModel(),
-        );
+    if (transactionId == null) {
+      await context.read<DatabaseController>().addData(
+            getRecordModel(),
+          );
+    } else {
+      await context.read<DatabaseController>().editData(
+            id: transactionId!,
+            item: getRecordModel(),
+          );
+    }
   }
 
   RecordModel getRecordModel() {
