@@ -93,17 +93,18 @@ class HomeScreen extends StatelessWidget {
                     .snapshots(),
                 builder: (context, snapshot) {
                   log('new snapshot');
-                  if (!snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SliverFillRemaining(
+                        child: Center(child: CircularProgressIndicator()));
+                  } else if (!snapshot.hasData ||
+                      (snapshot.data?.docs.isEmpty ?? true)) {
                     return const SliverFillRemaining(
                       child: Center(
                         child: Text('No records found!'),
                       ),
                     );
                   }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SliverFillRemaining(
-                        child: Center(child: CircularProgressIndicator()));
-                  }
+
                   return SliverList.separated(
                     itemBuilder: (context, index) {
                       RecordModel item = RecordModel.fromMap(
